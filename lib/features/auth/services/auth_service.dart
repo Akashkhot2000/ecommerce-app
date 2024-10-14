@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:ecommerce_app/Provider/user_provider.dart';
+import 'package:ecommerce_app/common/bottom_bar.dart';
 import 'package:ecommerce_app/common/custom_tost.dart';
 import 'package:ecommerce_app/constants/error_handling.dart';
 import 'package:ecommerce_app/constants/global_variables.dart';
@@ -86,61 +87,60 @@ class AuthService {
     }
   }
 
-void signInUser({
-  required BuildContext context,
-  required String email,
-  required String password,
-  required TextEditingController emailController,
-  required TextEditingController passwordController,
-}) async {
-  try {
-    http.Response res = await http.post(
-      Uri.parse('$uri/api/signin'),
-      body: jsonEncode({
-        'email': email,
-        'password': password,
-      }),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-    );
+  void signInUser({
+    required BuildContext context,
+    required String email,
+    required String password,
+    required TextEditingController emailController,
+    required TextEditingController passwordController,
+  }) async {
+    try {
+      http.Response res = await http.post(
+        Uri.parse('$uri/api/signin'),
+        body: jsonEncode({
+          'email': email,
+          'password': password,
+        }),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+      );
 
-    httpErrorHandle(
-      response: res,
-      context: context,
-      onSuccess: () async {
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        Provider.of<UserProvider>(context, listen: false).setUser(res.body);
-        await prefs.setString('x-auth-token', jsonDecode(res.body)['token']);
+      httpErrorHandle(
+        response: res,
+        context: context,
+        onSuccess: () async {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          Provider.of<UserProvider>(context, listen: false).setUser(res.body);
+          await prefs.setString('x-auth-token', jsonDecode(res.body)['token']);
 
-
-        final userType = jsonDecode(res.body)['type'];
-        if (userType == 'Seller') {
-          Navigator.pushNamedAndRemoveUntil(
-            context,
-            AdminScreen.routeName, 
-            (route) => false,
-          );
-        } else if (userType == 'Buyer') {
-          Navigator.pushNamedAndRemoveUntil(
-            context,
-            HomeScreen.routeName,
-            (route) => false,
-          );
-        }
-        emailController.clear();
-        passwordController.clear();
-      },
-    );
-  } catch (e) {
-    CommonToast.showToast(
-      context: context,
-      message: 'Failed to sign in. Please check your credentials.',
-      autoCloseDuration: const Duration(seconds: 5),
-      primaryColor: Colors.red,
-    );
+          final userType = jsonDecode(res.body)['type'];
+          if (userType == 'Seller') {
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              AdminScreen.routeName,
+              (route) => false,
+            );
+          } else if (userType == 'Buyer') {
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              BottomBar.routeName,
+              (route) => false,
+            );
+          }
+          emailController.clear();
+          passwordController.clear();
+        },
+      );
+    } catch (e) {
+      CommonToast.showToast(
+        context: context,
+        message: 'Failed to sign in. Please check your credentials.',
+        autoCloseDuration: const Duration(seconds: 5),
+        primaryColor: Colors.red,
+      );
+    }
   }
-}
 
   // get user data
   void getUserData(

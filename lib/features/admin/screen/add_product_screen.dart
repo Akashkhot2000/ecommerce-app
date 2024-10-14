@@ -39,11 +39,11 @@ class _AddProductScreenState extends State<AddProductScreen> {
   }
 
   List<String> productCategories = [
-    'Mobiles',
-    'Essentials',
-    'Appliances',
-    'Books',
-    'Fashion'
+    'Mechanicals',
+    'component',
+    'Electronics',
+    'component',
+    'Fashion',
   ];
 
   void sellProduct() {
