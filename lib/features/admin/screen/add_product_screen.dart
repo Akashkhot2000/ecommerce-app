@@ -26,7 +26,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
   final TextEditingController quantityController = TextEditingController();
   final AdminServices adminServices = AdminServices();
 
-  String category = 'Mobiles';
+  String category = 'electronic ';
   List<File> images = [];
   final _addProductFormKey = GlobalKey<FormState>();
   @override
@@ -38,12 +38,12 @@ class _AddProductScreenState extends State<AddProductScreen> {
     quantityController.dispose();
   }
 
-  List<String> productCategories = [
+  List<String>? productCategories = [
+    'electronic',
+    'Essentials',
     'Mechanicals',
-    'component',
-    'Electronics',
-    'component',
-    'Fashion',
+    'Books',
+    'Fashion'
   ];
 
   void sellProduct() {
@@ -170,7 +170,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   child: DropdownButton(
                     value: category,
                     icon: const Icon(Icons.keyboard_arrow_down),
-                    items: productCategories.map((String item) {
+                    items: productCategories?.map((String item) {
                       return DropdownMenuItem(value: item, child: Text(item));
                     }).toList(),
                     onChanged: (String? newvalue) {
