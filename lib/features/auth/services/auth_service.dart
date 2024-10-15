@@ -33,6 +33,7 @@ class AuthService {
     required TextEditingController phoneNumberController,
     required TextEditingController businessSectorController,
     required TextEditingController gstNumberController,
+    required Function(Auth auth) setAuth,
   }) async {
     try {
       User user = User(
@@ -74,6 +75,8 @@ class AuthService {
                 const Text('Account created! Login with the same credentials!'),
             autoCloseDuration: const Duration(seconds: 5),
           );
+
+          setAuth(Auth.signin);
         },
       );
     } catch (e) {

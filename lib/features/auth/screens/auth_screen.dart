@@ -31,7 +31,7 @@ class _AuthScreenState extends State<AuthScreen> {
       TextEditingController();
   final TextEditingController _gstNumberController = TextEditingController();
   String? _selectedUserType;
-  bool _isAgreedToTerms = false; 
+  bool _isAgreedToTerms = false;
 
   final List<String> _userTypes = ['Buyer', 'Seller'];
 
@@ -48,6 +48,11 @@ class _AuthScreenState extends State<AuthScreen> {
 
   void signUpUser() {
     authService.signUpUser(
+      setAuth: (Auth authStatus) {
+        setState(() {
+          _auth = authStatus;
+        });
+      },
       context: context,
       email: _emailController.text,
       password: _passwordController.text,
